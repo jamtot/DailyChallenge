@@ -59,7 +59,7 @@ def switched(input):
         for light in range(minimum,maximum+1): # inclusive to the upper range
             switches[light] = not switches[light] # change to what you're not
         #print switches
-        #print linesProcessed 
+        print linesProcessed 
 
     sum = 0
     for bulb in switches:
@@ -72,4 +72,4 @@ def switched(input):
 
 switched(exampleInput)
 switched(challengeInput)
-#switched(bonusInput)
+switched(bonusInput)
