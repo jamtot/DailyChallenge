@@ -128,6 +128,7 @@ def rli_to_subrli(input):
     start_index = int(splitdata.pop(0))
     length = int(splitdata.pop(0))
 
+    # a list to hold the output
     outputlist = []
     
     # find the index for the entry at or just below the start_index
@@ -139,12 +140,15 @@ def rli_to_subrli(input):
         else: # greater or equal
             break
     
+    # create a subsetted list of the data, only from the first point needed
     culledlist = splitdata[index:]
     for elem in culledlist:
-        if (int(elem)-start_index) < length:      
+        if (int(elem)-start_index) < length: 
+                 
             outputlist.append(str(int(elem)-start_index))
         else: break
 
+    # append the last entry, which is going to be the final length
     outputlist.append(str(length))
 
     output = (' ').join(outputlist)
@@ -153,20 +157,17 @@ def rli_to_subrli(input):
 def splitinputs(input):
     return input.splitlines()
 
-if __name__ == '__main__':
-    converted = []
-    splitputs = splitinputs(input)
-    for line in splitputs:
-        #print line
-        #print bin_to_rli(line)
-        converted.append( bin_to_rli(line) )
-        convertedstr = ('\n').join(converted)
-    
-    #print '----------'
+def getfiletext(filename):
+    with open(filename) as file:
+        return file.read()
 
-    convertsplit = splitinputs(convertedstr)
-    for line in convertsplit:
-        print "The line being converted from rle:"        
-        print line
-        print "The converted binary string:"
-        print rli_to_bin(line)
+def writetofile(data, filename):
+    with open(filename, 'w') as file:
+        file.write(data)
+
+if __name__ == '__main__':
+    data = getfiletext("bigstring.txt")
+    converted = bin_to_rli(data)
+    writetofile(converted, "bigstring_converted.txt")
+    reconverted = rli_to_bin(converted)
+    writetofile(reconverted, "bigstring_reconverted.txt")

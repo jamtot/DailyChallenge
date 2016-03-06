@@ -76,10 +76,32 @@ def test_conversions():
                "0 0 0 0 0 0 0 0 1 0 1 1 1 0 1 1 1 1 0 1 1 0 1 0 1 0 1 1 1 1 1 1"))))
 
     assert_equal(result1, "0 0 0 0 0 0 0 0 1 0 1 1 1 0 1 1 1 1 0 1 1 0 1 0 1 0 1 1 1 1 1 1")
-
     result2 = bintorli.rli_to_subrli("8 14 8 9 10 13 14 18 19 21 22 23 24 25 26 32")
     result3 = bintorli.rli_to_bin(result2)
     assert_equal(result3, "1 0 1 1 1 0 1 1 1 1 0 1 1 0")
+
+def test_large():
+    bigResult1 = bintorli.getfiletext("bigstring.txt")
+    bigResult1 = bigResult1.replace("\n", "")
+
+    bigResult2 = bintorli.bin_to_rli(bigResult1)
+    bigResult3 = bintorli.rli_to_bin(bigResult2)
+    
+    assert_equal(bigResult1, bigResult3)
+
+    bigData = (" ").join(['5','16', bigResult2])
+    bigResult4 = bintorli.rli_to_subrli(bigData)
+    bigResult5 = bintorli.rli_to_bin(bigResult4)
+
+    assert_equal(bigResult5, "1 1 1 1 0 0 0 0 0 0 0 1 1 0 1 1")
+
+    bigData2 = (" ").join(['785','17', bigResult2])
+    bigResult6 = bintorli.rli_to_subrli(bigData2)
+    bigResult7 = bintorli.rli_to_bin(bigResult6)
+
+    assert_equal(bigResult7, "1 1 1 1 0 0 0 0 0 1 1 1 1 1 0 0 0")
+        
+    
 
     
     
