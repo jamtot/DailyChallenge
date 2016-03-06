@@ -88,7 +88,40 @@ def rle_to_bin(rle_input):
     output = (' ').join(outputlist)
     return output
     
-
+def rle_to_rli(rle_input):
+    stringlist = rle_input.split()
+    outputlist = []
+    aggr, first = 0, True
+    for x in stringlist:
+        x = int(x)
+        if first:
+            # don't add 1
+            first = False
+        else:
+            # add one
+            x+=1
+        aggr+=x
+        outputlist.append(str(aggr))
+    return (' ').join(outputlist)
+        
+def rli_to_rle(rli_input):
+    stringlist = rli_input.split()
+    outputlist = []
+    previous, first = 0, True
+    for x in stringlist:
+        x = int(x)
+        towrite = x
+        if first:
+            # don't add 1
+            first = False
+        else:
+            # add one
+            previous+=1
+        towrite= x-previous
+        previous = x
+        outputlist.append(str(towrite))
+    return (' ').join(outputlist)
+        
 def splitinputs(input):
     return input.splitlines()
 
