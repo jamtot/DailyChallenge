@@ -142,9 +142,14 @@ def rli_to_subrli(input):
     
     # create a subsetted list of the data, only from the first point needed
     culledlist = splitdata[index:]
+
+    # in the case of the substring starting at one,
+    # there needs to be a 0 to denote no zeros
+    if index%2==1:
+        outputlist.append('0')
+
     for elem in culledlist:
-        if (int(elem)-start_index) < length: 
-                 
+        if (int(elem)-start_index) < length:      
             outputlist.append(str(int(elem)-start_index))
         else: break
 

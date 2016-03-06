@@ -89,18 +89,38 @@ def test_large():
     
     assert_equal(bigResult1, bigResult3)
 
-    bigData = (" ").join(['5','16', bigResult2])
-    bigResult4 = bintorli.rli_to_subrli(bigData)
-    bigResult5 = bintorli.rli_to_bin(bigResult4)
 
-    assert_equal(bigResult5, "1 1 1 1 0 0 0 0 0 0 0 1 1 0 1 1")
+def test_large_sub():
 
-    bigData2 = (" ").join(['785','17', bigResult2])
-    bigResult6 = bintorli.rli_to_subrli(bigData2)
-    bigResult7 = bintorli.rli_to_bin(bigResult6)
+    bigText = bintorli.getfiletext("bigstring.txt")
+    bigConv = bintorli.bin_to_rli(bigText)
 
-    assert_equal(bigResult7, "1 1 1 1 0 0 0 0 0 1 1 1 1 1 0 0 0")
-        
+    bigData = (" ").join(['5','16', bigConv])
+    bigResult1 = bintorli.rli_to_subrli(bigData)
+    assert_equal(bigResult1, "0 4 11 13 14 16")
+    
+    bigResult2 = bintorli.rli_to_bin(bigResult1)
+
+    assert_equal(bigResult2, "1 1 1 1 0 0 0 0 0 0 0 1 1 0 1 1")
+
+    bigData2 = (" ").join(['785','17', bigConv])
+    bigResult3 = bintorli.rli_to_subrli(bigData2)
+
+    assert_equal(bigResult3, "0 4 9 14 17")
+
+    bigResult4 = bintorli.rli_to_bin(bigResult3)
+
+    assert_equal(bigResult4, "1 1 1 1 0 0 0 0 0 1 1 1 1 1 0 0 0")
+
+    bigData3 = (" ").join(['13075','17', bigConv])
+    bigResult5 = bintorli.rli_to_subrli(bigData3)
+
+    assert_equal(bigResult5, "0 4 10 11 14 17")
+
+    bigResult6 = bintorli.rli_to_bin(bigResult5)
+
+    assert_equal(bigResult6, "1 1 1 1 0 0 0 0 0 0 1 0 0 0 1 1 1")
+    
     
 
     
