@@ -121,6 +121,34 @@ def rli_to_rle(rli_input):
         previous = x
         outputlist.append(str(towrite))
     return (' ').join(outputlist)
+
+def rli_to_subrli(input):
+    # splitting into needed data
+    splitdata = input.split()
+    start_index = int(splitdata.pop(0))
+    length = int(splitdata.pop(0))
+
+    outputlist = []
+    
+    # find the index for the entry at or just below the start_index
+    index = 0
+    for x in splitdata:
+        x = int(x)
+        if x < start_index:
+            index+=1
+        else: # greater or equal
+            break
+    
+    culledlist = splitdata[index:]
+    for elem in culledlist:
+        if (int(elem)-start_index) < length:      
+            outputlist.append(str(int(elem)-start_index))
+        else: break
+
+    outputlist.append(str(length))
+
+    output = (' ').join(outputlist)
+    return output
         
 def splitinputs(input):
     return input.splitlines()
