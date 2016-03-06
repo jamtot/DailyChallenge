@@ -44,12 +44,68 @@ def bin_to_rle(binary_input):
     output = (' ').join(outputlist)
     return output
 
+def rli_to_bin(rle_input):
+    stringlist = rle_input.split()
+    previous, zero, first, outputlist, char = 0, True, True, [], ''
+    for x in stringlist:
+        x = int(x)
+        toWrite = x-previous
+        if zero:  
+            char = '0'    
+            # write x zeros
+            zero = False
+        else:
+            char = '1'
+            # write x many ones
+            zero = True
+        for i in xrange(toWrite):
+            outputlist.append(char)
+        previous=x
+
+    output = (' ').join(outputlist)
+    return output
+
+def rle_to_bin(rle_input):
+    stringlist = rle_input.split()
+    zero, first, outputlist, char = True, True, [], ''
+    for x in stringlist:
+        x = int(x)
+        if first:
+            first = False
+        else:
+            x+=1
+        if zero:  
+            char = '0'    
+            # write x zeros
+            zero = False
+        else:
+            char = '1'
+            # write x many ones
+            zero = True
+        for i in xrange(x):
+            outputlist.append(char)
+
+    output = (' ').join(outputlist)
+    return output
+    
+
 def splitinputs(input):
     return input.splitlines()
 
 if __name__ == '__main__':
+    converted = []
     splitputs = splitinputs(input)
     for line in splitputs:
+        #print line
+        #print bin_to_rli(line)
+        converted.append( bin_to_rli(line) )
+        convertedstr = ('\n').join(converted)
+    
+    #print '----------'
+
+    convertsplit = splitinputs(convertedstr)
+    for line in convertsplit:
+        print "The line being converted from rle:"        
         print line
-        print bin_to_rli(line)
-        print bin_to_rle(line)
+        print "The converted binary string:"
+        print rli_to_bin(line)
