@@ -121,8 +121,22 @@ def test_large_sub():
 
     assert_equal(bigResult6, "1 1 1 1 0 0 0 0 0 0 1 0 0 0 1 1 1")
     
-    
+#  tests for 'hard' part
 
-    
-    
+def test_overwrite():
+    result1 = bintorli.rli_overwrite("3 0 3 > 2 3 7 10")
+    result2 = bintorli.rli_overwrite("3 1 3 > 2 3 7 10")
+    result3 = bintorli.rli_overwrite("3 1 3 > 10")
+    result4 = bintorli.rli_overwrite("3 1 3 > 0 10")
+    result5 = bintorli.rli_overwrite("3 0 3 7 10 12 15 > 8 9 10 13 14 18 19 21 22 23 24 25 26 32")
+
+    assert_equal(result1, "2 6 7 10")
+    assert_equal(result2, "2 3 4 6 7 10")
+    assert_equal(result3, "4 6 10")
+    assert_equal(result4, "0 3 4 10")
+    assert_equal(result5, "3 6 10 13 15 18 19 21 22 23 24 25 26 32")
+
+def test_additional_overwrite():
+    input1 = "6 1 4 7 11 12 15 16 19 > 0 1 5 7 8 10 14 16 17 18 19 20 24 34 36 37 40 42"
+    assert_equal(bintorli.rli_overwrite(input1), bintorli.cheat_overwrite(input1))
     
