@@ -192,14 +192,13 @@ def rli_overwrite(input):
     outputlist = []
     
     # find the index for the entry at or just below the start_index
-    index, firstchunk = 0, 0
+    index = 0
     
     for x in tobechanged:
         if x < start_index:
             # add elements up until the overwrite
             outputlist.append(str(x))
             index+=1
-            firstchunk+=1
         else: # greater or equal
             break
 
@@ -217,12 +216,15 @@ def rli_overwrite(input):
     # bring the index up to what would be the current position
     # to see if the current should be zeros or ones
     while (tobechanged[index] < changes[-1]+start_index):
+    #while (tobechanged[index] < int(outputlist[-1])):
         index+=1
+    #print index
 
     # if there's a change in number after the list, drop a changepoint
     if (index%2 == len(changes)%2):
     #if (len(outputlist)%2 != len(changes)%2):
     #if (len(outputlist)%2 == len(changes)%2): # passes 11/12 tests with this (although incorrect)
+        #if len(outputlist)<1 or str(changes[-1]+start_index) != outputlist[-1]:
         outputlist.append(str(changes[-1]+start_index))
         index+=1
 
