@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import defaultdict
 
 input1 = "4 aaccdeeeemmnnnoo"
 input2 = "5 aaaeeeefhhmoonssrrrrttttw"
@@ -39,59 +39,28 @@ def filter_list(letter_list, word_list):
         if good: filter_list.append(word)
     return filter_list
 
-def recurse(word, words, letters, previous = []):
+def recurse(baseword, word, words, letters, previous = []):
     # copy the letters
-    muh_letters = letters[:]
+    index = len(previous)+1
+    words_to_use = words[ baseword[index] ]
+    words_to_use = filter_list(letters, words_to_use)
 
-    if len(previous)<1:
-        ww = word
-    else:
-        ww = previous[0]
-
-    # get the range for the letters beginning with 
-    depth = len(previous)+1
-    found = False
-    
-    start_index = 0
-    end_index = len(words)
-    for i in xrange(len(words)):
-        if not found and ww[depth]==(words[i])[0]:
-            start_index = i
-            found = True
-        elif found and ww[depth]!=(words[i])[0]:
-            end_index = i
-            break
- 
-    if end_index > len(words): end_index = len(words)
-    
-
-    # get the list of possible words
-    words_to_use = []
-    for i in xrange(start_index, end_index):
-        words_to_use+=[words[i]]
-
-    potentials = filter_list(muh_letters, words)
-    #print potentials
     output = []
-    for w in potentials:
-        try:
-            muh_letters = remove_word(w, muh_letters)
-        except: break
+    for w in words_to_use:
         if (w == word):continue
-        if len(word) == len(previous)+2:
+        if index == len(word)-1:
             output+=[[word]+[w]]
         else:
-            search = recurse(w, words, muh_letters, previous+[word])
+            search = recurse(baseword, w, words, letters, previous+[word])
             output+=[[word] + result for result in search]
-
     return output
             
-
 def wordsquare(input, dictfile):
     # loading the wordlist by size    
     words_by_length = defaultdict(list)
     with open(dictfile, 'r') as file:
         words = [line.strip() for line in file]
+
     for word in words:
         words_by_length[len(word)].append(word)
 
@@ -99,22 +68,44 @@ def wordsquare(input, dictfile):
     split_input = input.split()
     square_size = int(split_input[0])
     letters_to_use = list(split_input[1])
-    
-    #print square_size
-    #print letters_to_use
 
     filtered_list = filter_list(letters_to_use, words_by_length[square_size])
-    #print filtered_list
-    attemptys = []
+
+    words_by_letters = defaultdict(list)
     for word in filtered_list:
-        attemptys += recurse(word, filtered_list, letters_to_use)
+        words_by_letters[word[0]].append(word)
+
+    start_letters = []
+    for x in words_by_letters:
+        start_letters += [x]
+
+    trys = []
+    for word in filtered_list:
+        baseword = word[:]
+        trys += recurse(baseword, word, words_by_letters, letters_to_use)
+    #print trys
      
     output = []  
     letters = ("").join(letters_to_use)
-    for attempt in attemptys:
-        if ("").join(sorted(("").join(attempt))) == letters: 
-            output += [attempt]
-    print output        
+    for t in trys:
+        if ("").join(sorted(("").join(t))) == letters: 
+            output += [t]
+    #print output 
+
+    for l in output:
+        listy = []
+
+        for elem in l:
+            listy+=[list(elem)]
+
+        zippy = zip(*listy)
+        zisty = []
+        for i in xrange(len(zippy)):
+            zisty+=[list(zippy[i])]
+
+        if listy==zisty:
+            print listy
+
 
 #wordsquare("4 eeeeddoonnnsssrv", "enable1.txt")
 wordsquare(input1, "enable1.txt")
