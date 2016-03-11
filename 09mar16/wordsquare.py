@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+input0 = "4 eeeeddoonnnsssrv"
 input1 = "4 aaccdeeeemmnnnoo"
 input2 = "5 aaaeeeefhhmoonssrrrrttttw"
 input3 = "5 aabbeeeeeeeehmosrrrruttvv"
@@ -22,8 +23,17 @@ hInput5 = "8 aaaaddddeeeeeeeeeeeeeeeeeeiiiiiimmnnnnnooprrrrrrssssssstttttvvzz"
 """
 #------END HARD MODE------------
 
+def can_remove(word, letter_list):
+    can = True
+    for letter in word:
+        if letter in letter_list:
+            # good
+            pass
+        else: can = False
+    return can
+
 def remove_word(word, letter_list):
-    remove_list = letter_list
+    remove_list = letter_list[:]
     for letter in word:
         if letter in remove_list:
             remove_list.remove(letter)
@@ -44,14 +54,18 @@ def recurse(baseword, word, words, letters, previous = []):
     index = len(previous)+1
     words_to_use = words[ baseword[index] ]
     words_to_use = filter_list(letters, words_to_use)
-
+    muh_letters = letters[:]
+    #print muh_letters
     output = []
     for w in words_to_use:
+        #if can_remove(w, muh_letters):
+        #    muh_letters = remove_word(w, muh_letters)
+        #else: break
         if (w == word):continue
         if index == len(word)-1:
             output+=[[word]+[w]]
         else:
-            search = recurse(baseword, w, words, letters, previous+[word])
+            search = recurse(baseword, w, words, muh_letters, previous+[word])
             output+=[[word] + result for result in search]
     return output
             
@@ -86,7 +100,8 @@ def wordsquare(input, dictfile):
     #print trys
      
     output = []  
-    letters = ("").join(letters_to_use)
+    letters = ("").join(sorted(("").join(letters_to_use)))
+    #print letters
     for t in trys:
         if ("").join(sorted(("").join(t))) == letters: 
             output += [t]
@@ -107,8 +122,10 @@ def wordsquare(input, dictfile):
             print listy
 
 
-#wordsquare("4 eeeeddoonnnsssrv", "enable1.txt")
+wordsquare(input0, "enable1.txt")
 wordsquare(input1, "enable1.txt")
+
+# ----- crashes (runs out of memory) ------
 #wordsquare(input2, "enable1.txt")
 #wordsquare(input3, "enable1.txt")
 #wordsquare(input4, "enable1.txt")
