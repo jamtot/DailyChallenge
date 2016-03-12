@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'edcf' working, you can type the following:
+['cede', 'ceded', 'cee', 'de', 'dee', 'deed', 'deeded', 'ed', 'ef', 'eff', 'fed', 'fee', 'feed']
+The longest word/s being: 
+'deeded'

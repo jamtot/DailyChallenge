@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'bnik' working, you can type the following:
+['bi', 'bib', 'bibb', 'bikini', 'bin', 'in', 'ink', 'inn', 'kibbi', 'kin', 'kinin', 'kink', 'nib']
+The longest word/s being: 
+'bikini'

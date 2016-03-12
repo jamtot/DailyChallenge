@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'poil' working, you can type the following:
+['ill', 'li', 'lip', 'lo', 'loll', 'lollipop', 'lollop', 'loo', 'loop', 'lop', 'oil', 'olio', 'op', 'pi', 'pili', 'pill', 'pip', 'plop', 'poi', 'pol', 'polio', 'poll', 'polo', 'pool', 'poop', 'pop']
+The longest word/s being: 
+'lollipop'

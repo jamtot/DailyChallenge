@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'qwer' working, you can type the following:
+['er', 'ere', 'err', 'ewe', 'ewer', 'ewerer', 're', 'ree', 'we', 'wee', 'weer', 'weewee', 'were']
+The longest word/s being: 
+'ewerer'

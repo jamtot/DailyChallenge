@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'vybu' working, you can type the following:
+['bub', 'bubby', 'buy', 'by']
+The longest word/s being: 
+'bubby'

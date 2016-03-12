@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'abcd' working, you can type the following:
+['aa', 'ab', 'aba', 'abaca', 'abba', 'ad', 'add', 'ba', 'baa', 'baba', 'bacaba', 'bacca', 'bad', 'cab', 'caca', 'cad', 'dab', 'dad', 'dada']
+The longest word/s being: 
+'bacaba'

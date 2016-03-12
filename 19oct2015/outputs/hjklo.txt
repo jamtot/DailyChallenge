@@ -1,0 +1,5 @@
+With a broken keyboard that only has 
+the letters 'hjklo' working, you can type the following:
+['ho', 'holk', 'hollo', 'holloo', 'hook', 'jo', 'kohl', 'kolo', 'kolokolo', 'kook', 'lo', 'loll', 'loo', 'look', 'oh', 'oho', 'ooh']
+The longest word/s being: 
+'weewee'
