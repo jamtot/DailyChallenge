@@ -20,7 +20,7 @@ def get_dist(input):
         x1,y1 = get_pos(input[i])
         x2,y2 = get_pos(input[i+1])
         dist+=((x2-x1)**2+(y2-y1)**2)**0.5
-    return round(dist,2)
+    return str(round(dist,2))+"cm"
 
 print get_dist(input0)
 print get_dist(input1)
