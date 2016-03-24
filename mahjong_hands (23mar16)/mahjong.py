@@ -62,6 +62,22 @@ Bamboo, 3
 Bamboo, 4
 Bamboo, 5"""
 
+input5="""14
+Circle,1
+Circle,2
+Circle,2
+Circle,3
+Circle,3
+Circle,4
+Circle,5
+Circle,6
+Circle,7
+Circle,8
+Circle,8
+Circle,8
+Circle,9
+Circle,9"""
+
 from copy import deepcopy
 
 # pair - two same suit tiles, with same value
@@ -242,6 +258,7 @@ hand_sorter(input1)
 hand_sorter(input2)    
 hand_sorter(input3)
 hand_sorter(input4)
+hand_sorter(input5)
 
 
 

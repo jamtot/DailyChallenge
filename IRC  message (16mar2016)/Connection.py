@@ -1,11 +1,36 @@
 input = """chat.freenode.net:6667
-carrot_chompa
-carrot_chompa
+lolbot7
+lolbot7
 Ed Sheeran
-#reddit-dailyprogrammer,#rdp,#botters-test
-Hello World!"""
+#rdp,#gg,#botters-test
+Hi, have you seen Chef?"""
 
 import socket
+import random
+
+def send(socket,msg):
+    print "out->", msg
+    socket.send(msg+"\r\n")
+
+lols = ["lol", "kek", "lel", "zozzle", "bazinga", "topkek",
+            "zim zam flim flam", "olo", "lols", "wew lad"]
+
+# using an iterative factorial so there's no deptherror
+def ifac(n):
+    if n < 0:
+        n=n*-1
+    for i in xrange(n-1, 1, -1):
+        n*=i
+    return n
+
+# this will only go 998 deep, usually 999 deep
+def fac(n):
+    if n < 0:
+        n=n*-1
+    if n == 1:
+        return 1
+    else:
+        return n * fac(n-1)
 
 def make_connection(input):
 
@@ -19,56 +44,122 @@ def make_connection(input):
     print "connected"
 
     nickmsg = "NICK %s" % nick
-    usermsg = "USER %s %d %s :%s\r\n" % (user, user_mode, server_name, name)
-    print nickmsg
-    print usermsg    
-    s.send(nickmsg+"\r\n")
-    s.send(usermsg+"\r\n")
+    usermsg = "USER %s %d %s :%s" % (user, user_mode, server_name, name)  
+    send(s, nickmsg)
+    send(s, usermsg)
     print "initial details sent"
     received = ""
     while True:
         if "\r\n" not in received:
             received += s.recv(512)
-        lines, received = received.split("\r\n", 1)
-        print lines
+        line, received = received.split("\r\n", 1)
+        print line
+        line = line.split()
 
-        if "376" in lines:
+        if line[1] == "376":
             joinmsg="JOIN %s"%channels
-            s.send(joinmsg+"\r\n")
-            print joinmsg
+            send(s, joinmsg)
 
-        for chan in chans:
-            if "JOIN" in lines and chan in lines:
-                hellomsg="PRIVMSG %s :Hello World!"%chan
-                s.send(hellomsg+"\r\n")
-                print hellomsg
+        elif line[1]=="JOIN":
+            hellomsg="PRIVMSG %s :%s"%(line[2],message)#the channel
+            send(s, hellomsg)
 
-        if nick in lines:
-            command = lines.split(nick)
-            command = command[1]
-            
-        if "PRIVMSG" in lines and nick in lines:
-            content = lines.split()   
-            chann=content[2]
-            sender=content[3]
-            if nick in chann:
-                chann=sender
-            stuff=(" ").join(content[4:])
-            print content
-            print chann
-            print sender
-            privmsg="PRIVMSG %s %s can't yet handle \"%s\""%(
-                chann,sender,stuff)
-            s.send(privmsg+"\r\n")
-            print privmsg
-             
+        
+        #:GeekDude!G33kDude@192-168-1-42.isp.com PRIVMSG #rdp :GeekBot: mult 5 4 3 2 1 
+        # if "PRIVMSG ... nick:"           
+        elif line[1] == "PRIVMSG" and nick + ":" in line[3]:
+            # split off the name, then remove the ':' before it
+            sender = line[0].split("!")[0][1:]
+            if line[2] in chans or line[2] in nick:
+                to = line[2] if line[2] in chans else sender
+                if len(line)>4:
+                    if line[4] == "sum":
+                        try:
+                            total = sum(map(int, line[5:]))
+                            summsg = "PRIVMSG %s :%s: The sum is: %d"%(to, sender, total)
+                            send(s, summsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg)
+                    elif line[4] == "diff":
+                        try:
+                            total = reduce(lambda x,y: x-y, map(int,line[5:]))
+                            diffmsg = "PRIVMSG %s :%s: The diff is: %d"%(to, sender, total)
+                            send(s, diffmsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg)
+                    elif line[4] == "mult":
+                        try:
+                            total = reduce(lambda x,y: x*y, map(int,line[5:]))
+                            multmsg = "PRIVMSG %s :%s: The mult is: %d"%(to, sender, total)
+                            send(s, multmsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg)
+                    elif line[4] == "div":
+                        try:
+                            total = reduce(lambda x,y: x/y, map(int,line[5:]))
+                            divmsg = "PRIVMSG %s :%s: The div is: %d"%(to, sender, total)
+                            send(s, divmsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg)
 
-        if lines.startswith("PING"):
-            pong = list(lines)        
-            pong[1] = "O"
-            pong = ("").join(pong)
-            print pong
-            s.send(pong+"\r\n")
+                    elif line[4] == "lol":
+                        randlol = random.randint(0, len(lols)-1)
+                        lolmsg = "PRIVMSG %s :%s: %s"%(to, sender, lols[randlol])
+                        send(s, lolmsg)
+                    elif line[4] == "fac":
+                        try:
+                            total = ifac(int(line[5]))
+                            facmsg = "PRIVMSG %s :%s: The factorial of %s is: %d"%(to, sender, line[5], total)
+                            send(s, facmsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg) 
+                    elif line[4] == "commands":
+                        cmdmsg = "PRIVMSG %s :%s: fac #, recfac #, sum # #.., div # #.., mult # #.., diff # #.."%(to, sender)
+                        send(s, cmdmsg)
+                    elif line[4] == "recfac":
+                        try:
+                            total = fac(int(line[5]))
+                            facmsg = "PRIVMSG %s :%s: The recursive factorial of %s is: %d"%(to, sender, line[5], total)
+                            send(s, facmsg)
+                        except ValueError:
+                            errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
+                            send(s, errormsg) 
+                        except RuntimeError:
+                            errormsg = "PRIVMSG %s :%s: RuntimeError, 2DEEP4ME"%(to, sender)
+                            send(s, errormsg) 
+                            
+                    elif line[4] == "VERSION":
+                        vmsg = "PRIVMSG %s :%s: Version? I don't know. v0.00002?"%(to, sender) 
+                        send(s,vmsg)             
+                    else:
+                        mssg = 'PRIVMSG %s :%s: %s' % (to, sender, ' '.join(line[4:]))
+                        send(s, mssg)
+        elif ":lol" in line[3:] or "lol" in line[3:]:
+            if line[2] in chans:
+                randlol = random.randint(0, len(lols)-1)
+                lolmsg = "PRIVMSG %s :%s"%(line[2], lols[randlol])
+                send(s, lolmsg)       
+        elif (":stop" in line[3:] or "stop" in line[3:]) and "that" in line[4:]:
+            if line[2] in chans:
+                nomsg = "PRIVMSG %s :no u"%(line[2])
+                send(s, nomsg)               
+        elif (":no" in line[3:] or "no" in line[3:]) and "u" in line[4:]:
+            if line[2] in chans:
+                stopmsg = "PRIVMSG %s :stop that"%(line[2])
+                send(s, stopmsg)               
+        elif ":chef" in line[3:] or "chef" in line[3:] or "Chef" in line[3:]:
+            if line[2] in chans:
+                chefmsg = "PRIVMSG %s :Chef? 86%% on Rotten Tomatoes, baby!"%(line[2])
+                send(s, chefmsg) 
+
+        elif line[0] == "PING":
+            pong = "PONG %s"%line[1]
+            send(s, pong)
 
 
 make_connection(input)
