@@ -1,37 +1,3 @@
-input = """chat.freenode.net:6667
-chefbot
-chefbot
-Ed Sheeran
-#gg
-Hi, have you seen Chef?"""
-
-import socket
-import random
-
-def send(socket,msg):
-    print "out->", msg
-    socket.send(msg+"\r\n")
-
-lols = ["lol", "kek", "lel", "zozzle", "bazinga", "topkek",
-            "zim zam flim flam", "olo", "lols", "wew lad"]
-
-# using an iterative factorial so there's no deptherror
-def ifac(n):
-    if n < 0:
-        n=n*-1
-    for i in xrange(n-1, 1, -1):
-        n*=i
-    return n
-
-# this will only go 998 deep, usually 999 deep
-def fac(n):
-    if n < 0:
-        n=n*-1
-    if n == 1:
-        return 1
-    else:
-        return n * fac(n-1)
-
 def make_connection(input):
 
     server, nick, user, name, channels, message = input.splitlines()
@@ -64,6 +30,9 @@ def make_connection(input):
             hellomsg="PRIVMSG %s :%s"%(line[2],message)#the channel
             send(s, hellomsg)
 
+        elif line[0] == "PING":
+            pong = "PONG %s"%line[1]
+            send(s, pong)
         
         #:GeekDude!G33kDude@192-168-1-42.isp.com PRIVMSG #rdp :GeekBot: mult 5 4 3 2 1 
         # if "PRIVMSG ... nick:"           
@@ -157,9 +126,6 @@ def make_connection(input):
                 chefmsg = "PRIVMSG %s :Chef? 86%% on Rotten Tomatoes, baby!"%(line[2])
                 send(s, chefmsg) 
 
-        elif line[0] == "PING":
-            pong = "PONG %s"%line[1]
-            send(s, pong)
 
 
 make_connection(input)
