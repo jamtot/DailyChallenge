@@ -1,12 +1,15 @@
 input = """chat.freenode.net:6667
-chefbot
-chefbot
+eljefe
+eljefe
 Jon Favreau"""
 
 import socket
 import threading
 import random
 import datetime
+import readline
+import sys
+from collections import defaultdict
 
 lols = ["lol", "kek", "lel", "zozzle", "bazinga", "topkek",
             "zim zam flim flam", "olo", "lols", "wew lad"]
@@ -41,6 +44,7 @@ class Client(object):
         self.current_channel = ''
         self.channels = []
         self.bg_visible = bg_visible
+        self.nicknames = defaultdict(list)
 
     def connect(self):
         
@@ -73,19 +77,34 @@ class Client(object):
                 nowtime = "[%r:%r:%r]" % (now.hour, now.minute, now.second)
                 sender = line[0].split("!")[0][1:]
                 msg = " ".join(line[3:])[1:]# loses the ':' at the start
+                # saves the current input, when incoming text interupts
+                sys.stdout.write('\r'+' '*(len(readline.get_line_buffer())+2)+'\r')
                 print "%s %s <%s> %s"% (nowtime,line[2],sender,msg)
+                sys.stdout.write(readline.get_line_buffer())
+                sys.stdout.flush()
+                
                 
             elif line[0] == "PING":
                 if self.bg_visible:
                     print " ".join(line)
                 pong = "PONG %s"%line[1]
                 self.send(pong)
-            else: print " ".join(line)
-            
+            else: 
+                sys.stdout.write('\r'+' '*(len(readline.get_line_buffer())+2)+'\r')
+                print " ".join(line)
+                sys.stdout.write(readline.get_line_buffer())
+                sys.stdout.flush()                
 
             if line[1] == "376":
                 if self.bg_visible:
                     print "MOTD done, you can join now."
+
+            elif line[1] == "353":
+                print line[4], line[5:]
+                self.nicknames[line[4]] = [line[5:]]
+
+            
+            
 
     def out(self):
         print "STARTING SEND TRHEAD"
@@ -94,8 +113,10 @@ class Client(object):
             if not t_input:
                 continue
             if "/quit" in t_input:
+                # kind of errors on the closing (due to second thread)
+                msg = "PRIVMSG %s :%s: %s OUT!"%(self.current_channel,t_input[1],self.nick)
+                self.send(msg)
                 self.send("QUIT")
-                self.socky.shutdown(socket.SHUT_RDWR)
                 self.socky.close()  
                 exit(1)
             elif "/join" in t_input:
@@ -116,6 +137,9 @@ class Client(object):
                     print "Channels you are in:",
                     for chan in self.channels:
                         print chan,
+            elif "/commands" in t_input:
+                if self.current_channel != "":
+                    print "Channels you are in:",
             elif "/ch" in t_input:
                 t_input = t_input.split("/ch")
                 if t_input[1] in self.channels:
@@ -127,6 +151,17 @@ class Client(object):
                     joinmsg="JOIN %s"%self.current_channel
                     self.channels.append(t_input[1])
                     self.send(joinmsg)
+            elif "/users" in t_input:
+                print self.nicknames[self.current_channel]
+                for name in self.nicknames[self.current_channel]:
+                    print name,
+            elif "/nick" in t_input:
+                # no handling of taken nicknames
+                t_input = t_input.split("/nick")
+                if len(t_input[1])>0:
+                    print "changing nick to %s" % t_input[1]
+                    self.nick = t_input[1]
+                    self.send("NICK %s"% t_input[1])
             else:
                 if self.current_channel != "":
                     # used to remove the input and write over where it was

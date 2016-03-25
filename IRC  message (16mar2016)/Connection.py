@@ -2,7 +2,7 @@ input = """chat.freenode.net:6667
 chefbot
 chefbot
 Ed Sheeran
-#gg
+#rdpPONG,#gg,#botters-test,#reddit-dailyprogrammer
 Hi, have you seen Chef?"""
 
 import socket
@@ -13,14 +13,22 @@ def send(socket,msg):
     socket.send(msg+"\r\n")
 
 lols = ["lol", "kek", "lel", "zozzle", "bazinga", "topkek",
-            "zim zam flim flam", "olo", "lols", "wew lad"]
+            "zim zam flim flam", "olo", "lols", "wew lad", "memes", "loooool",
+        "lolololol", "boingy"]
+
+chefs = ["Did I hear Chef?", "86% on Rotten Tomatoes, baby!", "Jon Favreau, son!",
+            "El Jefe!", "I will buy a food truck!", "I own Chef on Blu-Ray.", "Move over Iron Man, Chef's here.", "Chef's pretty good."]
 
 # using an iterative factorial so there's no deptherror
 def ifac(n):
+    minus = False
     if n < 0:
         n=n*-1
+        minus=True
     for i in xrange(n-1, 1, -1):
         n*=i
+    if minus:
+        n*=-1
     return n
 
 # this will only go 998 deep, usually 999 deep
@@ -35,7 +43,8 @@ def fac(n):
 def make_connection(input):
 
     server, nick, user, name, channels, message = input.splitlines()
-    chans = channels.split(",")
+    chans = channels.split(",") if "," in channels else channels 
+    
     server, port = server.split(":")
     server_name = "*"
     user_mode = 0
@@ -60,11 +69,10 @@ def make_connection(input):
             joinmsg="JOIN %s"%channels
             send(s, joinmsg)
 
-        elif line[1]=="JOIN":
+        elif line[1]=="JOIN" and line[0].split("!")[0][1:] == nick:
             hellomsg="PRIVMSG %s :%s"%(line[2],message)#the channel
             send(s, hellomsg)
 
-        
         #:GeekDude!G33kDude@192-168-1-42.isp.com PRIVMSG #rdp :GeekBot: mult 5 4 3 2 1 
         # if "PRIVMSG ... nick:"           
         elif line[1] == "PRIVMSG" and nick + ":" in line[3]:
@@ -105,6 +113,9 @@ def make_connection(input):
                         except ValueError:
                             errormsg = "PRIVMSG %s :%s: ValueError"%(to, sender)
                             send(s, errormsg)
+                        except ZeroDivisionError:
+                            errormsg = "PRIVMSG %s :%s: SUCK IT!"%(to, sender)
+                            send(s, errormsg)
 
                     elif line[4] == "lol":
                         randlol = random.randint(0, len(lols)-1)
@@ -139,7 +150,7 @@ def make_connection(input):
                     else:
                         mssg = 'PRIVMSG %s :%s: %s' % (to, sender, ' '.join(line[4:]))
                         send(s, mssg)
-        elif ":lol" in line[3:] or "lol" in line[3:]:
+        elif len(line)>3 and line[3][1:] in lols:
             if line[2] in chans:
                 randlol = random.randint(0, len(lols)-1)
                 lolmsg = "PRIVMSG %s :%s"%(line[2], lols[randlol])
@@ -154,9 +165,14 @@ def make_connection(input):
                 send(s, stopmsg)               
         elif ":chef" in line[3:] or "chef" in line[3:] or "Chef" in line[3:]:
             if line[2] in chans:
-                chefmsg = "PRIVMSG %s :Chef? 86%% on Rotten Tomatoes, baby!"%(line[2])
+                randchef = random.randint(0, len(chefs)-1)
+                chefmsg = "PRIVMSG %s :%s"%(line[2], chefs[randchef])
                 send(s, chefmsg) 
-
+        elif ":GTFO" in line[3:] and "CHEFLOVER" in line[4:]:
+            chefmsg = "PRIVMSG %s :ok.. sorry senpai"%(line[2])
+            send(s, chefmsg) 
+            send(s, "QUIT") 
+            s.close()
         elif line[0] == "PING":
             pong = "PONG %s"%line[1]
             send(s, pong)
