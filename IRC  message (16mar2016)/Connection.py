@@ -2,8 +2,9 @@ input = """chat.freenode.net:6667
 chefbot
 chefbot
 Ed Sheeran
-#rdpPONG,#gg,#botters-test,#reddit-dailyprogrammer
+#rdpPONG,#gg
 Hi, have you seen Chef?"""
+#,#botters-test,#reddit-dailyprogrammer
 
 import socket
 import random
@@ -73,7 +74,12 @@ def make_connection(input):
             hellomsg="PRIVMSG %s :%s"%(line[2],message)#the channel
             send(s, hellomsg)
 
-        #:GeekDude!G33kDude@192-168-1-42.isp.com PRIVMSG #rdp :GeekBot: mult 5 4 3 2 1 
+        elif ":knivesdown" in line[3:]:
+                chefmsg = "PRIVMSG %s :COOKED UP A STROM"%(line[2])
+                send(s, chefmsg) 
+                send("QUIT") 
+                socket.close()
+
         # if "PRIVMSG ... nick:"           
         elif line[1] == "PRIVMSG" and nick + ":" in line[3]:
             # split off the name, then remove the ':' before it
