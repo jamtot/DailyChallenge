@@ -39,6 +39,27 @@ def find_NOS(num):
     for i in xrange(len(nos)):
         pass
 
+    
+
+def get_next_tern(i=1):
+    while True:
+        for x in product(range(3), repeat=i):
+            y = "".join(map(str,list(x)))
+            yield y 
+        i+=1
+
+
+def find_num(decnum):
+    tern_gen = get_next_tern()
+    i = next(tern_gen)
+    while nos2dec(i) != decnum:
+        i = next(tern_gen)
+    return i
+
+def get_nums_to(numto):
+    for i in xrange(numto+1):
+        print "%d = %s" %(i, find_num(i))
+
 
 def gen_ternary_nums(max):
     nums = []
@@ -78,3 +99,7 @@ if __name__ == "__main__":
     for x in xrange(0,51):
         print "%d: %r" %(x,nosdict[x][0])
         
+
+    assert find_num(20) == "0202"   
+    get_nums_to(50)
+    
