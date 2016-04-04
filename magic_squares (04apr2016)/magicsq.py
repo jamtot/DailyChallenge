@@ -15,6 +15,15 @@ bonusinput3= [73,77,11,66,25,107,4,112,12,99,85,
 17,95,44,101,56,83,39,115,45,62,14,
 79,52,104,28,89,8,68,29,67,53,94,
 93,91,16,105,21,10,23,87,15,113,97]# => true
+bonusinput4= [37, 78, 29, 70, 21, 62, 13, 54, 5,
+6, 38, 79, 30, 71, 22, 63, 14, 46,
+47, 7, 39, 80, 31, 72, 23, 55, 15,
+16, 48, 8, 40, 81, 32, 64, 24, 56,
+57, 17, 49, 9, 41, 73, 33, 65, 25,
+26, 58, 18, 50, 1, 42, 74, 34, 66,
+67, 27, 59, 10, 51, 2, 43, 75, 35,
+36, 68, 19, 60, 11, 52, 3, 44, 76,
+77, 28, 69, 20, 61, 12, 53, 4, 45]# => true
 
 def magicsquare(sqinput):
     total = len(sqinput)
@@ -55,3 +64,4 @@ if __name__ == "__main__":
     print magicsquare(bonusinput1)# False.
     print magicsquare(bonusinput2)# True. Sum is 34.
     print magicsquare(bonusinput3)# True. Sum is 671.
+    print magicsquare(bonusinput4)# True. Sum is 369.
