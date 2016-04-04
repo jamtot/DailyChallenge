@@ -24,6 +24,33 @@ bonusinput4= [37, 78, 29, 70, 21, 62, 13, 54, 5,
 67, 27, 59, 10, 51, 2, 43, 75, 35,
 36, 68, 19, 60, 11, 52, 3, 44, 76,
 77, 28, 69, 20, 61, 12, 53, 4, 45]# => true
+bonusinput5= [1,120,121,48,85,72,73,60,97,24,25,144,
+142,27,22,99,58,75,70,87,46,123,118,3,
+11,110,131,38,95,62,83,50,107,14,35,134,
+136,33,16,105,52,81,64,93,40,129,112,9,
+8,113,128,41,92,65,80,53,104,17,32,137,
+138,31,18,103,54,79,66,91,42,127,114,7,
+5,116,125,44,89,68,77,56,101,20,29,140,
+139,30,19,102,55,78,67,90,43,126,115,6,
+12,109,132,37,96,61,84,49,108,13,36,133,
+135,34,15,106,51,82,63,94,39,130,111,10,
+2,119,122,47,86,71,74,59,98,23,26,143,
+141,28,21,100,57,76,69,88,45,124,117,4]# => true
+
+
+bonus2input1=[8, 1, 6, 3, 5, 7]# => true
+bonus2input2=[3, 5, 7, 8, 1, 6]# => false
+bonus2input3= [1,120,121,48,85,72,73,60,97,24,25,144,
+142,27,22,99,58,75,70,87,46,123,118,3,
+11,110,131,38,95,62,83,50,107,14,35,134,
+136,33,16,105,52,81,64,93,40,129,112,9,
+8,113,128,41,92,65,80,53,104,17,32,137,
+138,31,18,103,54,79,66,91,42,127,114,7,
+5,116,125,44,89,68,77,56,101,20,29,140,
+139,30,19,102,55,78,67,90,43,126,115,6,
+12,109,132,37,96,61,84,49,108,13,36,133,
+135,34,15,106,51,82,63,94,39,130,111,10,
+2,119,122,47,86,71,74,59,98,23,26,143]# => true
 
 def magicsquare(sqinput):
     total = len(sqinput)
@@ -52,16 +79,67 @@ def magicsquare(sqinput):
             if x==y==diags[0]:
                 continue
             else: break
-        else: 
-            return "True. Sum is %d." % diags[0]
-    return "False."
+        else:
+            print "Sum is %d." % diags[0]
+            return True 
+    return False
+
+
+def ismagic(sqinput):
+    # because we know that a square minus
+    # a row is between squares (e.g. 3*2 is
+    # between 2*2 and 3*3), we can square root,
+    # truncate the decimal, add one and square 
+    # that to achieve our total square size
+    total = (int(len(sqinput)**0.5)+1)**2
+    size = int(total**0.5)
+    
+    sparenums = []
+    # in range of all nums
+    sparenums = [num for num in range(1,total+1) if num not in sqinput]
+    sublists = [sqinput[i:i+size] for i in range(0, len(sqinput), size)]
+
+    # get the sum of the top rows
+    rowsofar = map(sum, sublists)
+    # if they're not equal, we're outta here
+    if not all(x==rowsofar[0] for x in rowsofar):
+        return False
+
+    # row sums are equal, so thats the sum we want
+    sumtoget = rowsofar[0]
+
+    # get the sum of the columns minus last row
+    cols = map(sum,zip(*sublists))
+
+    # make the bottom row you need
+    neededrow = []
+    for col in cols:
+        if (sumtoget-col) in sparenums:
+            neededrow.append(sumtoget-col)
+        else: return False
+
+    # making sure numbers were only used once
+    if sorted(neededrow) != sorted(sparenums):
+        return False
+
+    # add the new row to the end of the input
+    for num in neededrow:
+        sqinput.append(num)
+        
+    # now throw it into the other function
+    return magicsquare(sqinput)
 
 if __name__ == "__main__":
-    print magicsquare(input0)# True. Sum is 15.
-    print magicsquare(input1)# True. Sum is 15.
-    print magicsquare(input2)# False.
-    print magicsquare(input3)# False.
-    print magicsquare(bonusinput1)# False.
-    print magicsquare(bonusinput2)# True. Sum is 34.
-    print magicsquare(bonusinput3)# True. Sum is 671.
-    print magicsquare(bonusinput4)# True. Sum is 369.
+    assert magicsquare(input0) == True# True. Sum is 15.
+    assert magicsquare(input1) == True# True. Sum is 15.
+    assert magicsquare(input2) == False# False.
+    assert magicsquare(input3) == False# False.
+    assert magicsquare(bonusinput1) == False# False.
+    assert magicsquare(bonusinput2) == True# True. Sum is 34.
+    assert magicsquare(bonusinput3) == True# True. Sum is 671.
+    assert magicsquare(bonusinput4) == True# True. Sum is 369.
+    assert magicsquare(bonusinput5) == True# True. Sum is 870.
+
+    assert ismagic(bonus2input1) == True# True. Sum is 15.
+    assert ismagic(bonus2input2) == False# False.
+    assert ismagic(bonus2input3) == True# True. Sum is 870.
