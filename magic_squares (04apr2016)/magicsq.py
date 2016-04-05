@@ -94,7 +94,6 @@ def ismagic(sqinput):
     total = (int(len(sqinput)**0.5)+1)**2
     size = int(total**0.5)
     
-    sparenums = []
     # in range of all nums
     sparenums = [num for num in range(1,total+1) if num not in sqinput]
     sublists = [sqinput[i:i+size] for i in range(0, len(sqinput), size)]
@@ -130,16 +129,16 @@ def ismagic(sqinput):
     return magicsquare(sqinput)
 
 if __name__ == "__main__":
-    assert magicsquare(input0) == True# True. Sum is 15.
-    assert magicsquare(input1) == True# True. Sum is 15.
-    assert magicsquare(input2) == False# False.
-    assert magicsquare(input3) == False# False.
-    assert magicsquare(bonusinput1) == False# False.
-    assert magicsquare(bonusinput2) == True# True. Sum is 34.
-    assert magicsquare(bonusinput3) == True# True. Sum is 671.
-    assert magicsquare(bonusinput4) == True# True. Sum is 369.
-    assert magicsquare(bonusinput5) == True# True. Sum is 870.
+    assert magicsquare(input0) == True # True. Sum is 15.
+    assert magicsquare(input1) == True # True. Sum is 15.
+    assert magicsquare(input2) == False # False.
+    assert magicsquare(input3) == False # False.
+    assert magicsquare(bonusinput1) == False # False.
+    assert magicsquare(bonusinput2) == True # True. Sum is 34.
+    assert magicsquare(bonusinput3) == True # True. Sum is 671.
+    assert magicsquare(bonusinput4) == True # True. Sum is 369.
+    assert magicsquare(bonusinput5) == True # True. Sum is 870.
 
-    assert ismagic(bonus2input1) == True# True. Sum is 15.
-    assert ismagic(bonus2input2) == False# False.
-    assert ismagic(bonus2input3) == True# True. Sum is 870.
+    assert ismagic(bonus2input1) == True # True. Sum is 15.
+    assert ismagic(bonus2input2) == False # False.
+    assert ismagic(bonus2input3) == True # True. Sum is 870.
