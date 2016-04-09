@@ -1,6 +1,4 @@
 import json
-from pprint import pprint
-from collections import defaultdict
 
 def GetData(filename):
     with open(filename) as data_file:
