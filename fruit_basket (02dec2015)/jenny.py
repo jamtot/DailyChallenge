@@ -80,6 +80,6 @@ if __name__ == "__main__":
     findfruits(input0, 500)
     print
     # very slow to run, as it has to go VERY deep
-    #finds 180solutions, there are supposed to be 181
+    #finds 180/181 solutions
     findfruits(input1, 500)
 
