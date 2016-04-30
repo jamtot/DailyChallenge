@@ -33,10 +33,9 @@ class busdriver(object):
         self.route = route
         self.gossips = gossips
         self.ID = [ID]
-        self.sgen = self.stopgen()
         self.gossipsneeded=totalgossips
         self.stopindex = 0
-        self.currentstop = self.route[self.stopindex]#self.sgen.next()
+        self.currentstop = self.route[self.stopindex]
         self.routelen = len(self.route)
         self.bonus = bonus
         self.waitone = False
@@ -53,7 +52,6 @@ class busdriver(object):
         print self.route, self.ID, self.currentstop, self.gossips
 
     def nextstop(self):
-        #self.currentstop = self.sgen.next()
         self.stopindex+=1
         if self.waitone:
             self.stopindex-=1
@@ -61,12 +59,6 @@ class busdriver(object):
         self.stopindex%=self.routelen
         self.currentstop = self.route[self.stopindex]
 
-    def stopgen(self): # generates the next stop
-        i = 1 # starts at the first stop
-        while i < 480:
-            #self.currentstop = self.route[i%routelen]
-            yield self.route[i%self.routelen]#self.currentstop
-            i+=1
 
     def gotthegoss(self):
         return self.gossips == self.gossipsneeded
@@ -75,7 +67,7 @@ class busdriver(object):
         if self.currentstop == other.currentstop:
             self.gossip(other.ID)
         
-        
+ 
 def splitroutes(inpt):
     return [map(int,i.split()) for i in inpt.splitlines()]
 
@@ -92,7 +84,6 @@ def howmanystops(inpt, bonus=False):
                 if i != j:
                     drivers[i].stop(drivers[j])
         for i in xrange(totaldrivers):
-            #drivers[i].details()
             drivers[i].nextstop()
         stopsofar+=1
     if stopsofar<480:
