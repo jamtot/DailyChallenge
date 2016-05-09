@@ -74,6 +74,19 @@ def degrees(inpt):
         nodedict[i[1]].append(i[0])
     for key in sorted(nodedict):
         print "Node %d has a degree of %d"%(key, len(nodedict[key]))
+    print
+    adjmatrix(nodes, nodedict)
+
+def adjmatrix(nodes, nodedict):
+    print "Adjacency matrix:"
+    for y in xrange(1, nodes+1):
+        for x in xrange(1, nodes+1):
+            if x in nodedict[y]:
+                print 1,
+            else: print 0,
+        print
+                
+        
 
 if __name__ == "__main__":
     degrees(input0)
