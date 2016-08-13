@@ -23,8 +23,32 @@ def insBracket(string, pairs):
         k=(k+2)%pairlen
     return bracketed
 
+def strinput(func):
+    array1=[]
+    array2=[]
+    for i in xrange(2):
+        line=raw_input()
+        while line!='':
+            if i==0:
+                array1.append(line)
+            else:
+                array2.append(line)
+            line=raw_input()                
+        
+    if func.lower()=="bracket":
+        if len(array1)==1:
+            array1=array1[0]
+        print '\n'.join(insBracket(array1,''.join(map(str,array2))))
+    elif func.lower()=="weave":
+        print '\n'.join(insWeave(array1,array2))
+        
+
 if __name__ == "__main__":
     print insWeave([11], [0,1,2,3])
     print insWeave([11,12], [0, 1, 2, 3])  
     print insWeave([11,12,13], [0, 1])
     print insBracket ('abc'  , '()' )
+    print insBracket ('+-'  , '234567' )
+
+    while True:
+        strinput(raw_input())
